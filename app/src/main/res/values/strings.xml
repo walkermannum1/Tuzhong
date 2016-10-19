@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Tuzhong</string>
+    <string name="app_name">途中</string>
+    <string name="ride">骑行</string>
+    <string name="activity">活动</string>
+    <string name="mine">我的</string>
+    <string name="safe">安全</string>
 </resources>
