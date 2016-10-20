@@ -16,7 +16,7 @@ import com.example.user.tuzhong.ui.RideFragment;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener{
-
+    private String TAG = MainActivity.class.getSimpleName();
     private ArrayList<Fragment> fragments;
 
     @Override
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
     @Override
     public void onTabSelected(int position) {
-        //Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
+        Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
         if (fragments != null) {
             if (position < fragments.size()) {
                 FragmentManager fm = getSupportFragmentManager();
