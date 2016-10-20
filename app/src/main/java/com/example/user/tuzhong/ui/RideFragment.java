@@ -30,7 +30,7 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
  * Created by user on 2016/10/19.
  */
 
-public class RideFragment extends Fragment implements AMapLocationListener, LocationSource{
+public class RideFragment extends SupportMapFragment implements AMapLocationListener, LocationSource{
     private static RideFragment fragment = null;
     //@ViewInject(R.id.map)
 
@@ -40,7 +40,7 @@ public class RideFragment extends Fragment implements AMapLocationListener, Loca
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mLocationOption;
 
-    public static Fragment newInstance() {
+    public static SupportMapFragment newInstance() {
         if (fragment == null) {
             synchronized (RideFragment.class) {
 
@@ -73,11 +73,19 @@ public class RideFragment extends Fragment implements AMapLocationListener, Loca
     private void setUpMap() {
         aMap.setLocationSource(this);
         aMap.getUiSettings().setMyLocationButtonEnabled(true);
+        aMap.getUiSettings().setCompassEnabled(true);
+        aMap.getUiSettings().setScaleControlsEnabled(true);
         aMap.setMyLocationEnabled(true);
         aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
         MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.content_btn_location));
+        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.gps_point));
         aMap.setMyLocationStyle(myLocationStyle);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //mapView.onCreate(savedInstanceState);
     }
 
     @Override
@@ -93,12 +101,6 @@ public class RideFragment extends Fragment implements AMapLocationListener, Loca
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
@@ -106,6 +108,23 @@ public class RideFragment extends Fragment implements AMapLocationListener, Loca
             mLocationClient.onDestroy();
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        // TODO Auto-generated method stub
+        super.onDestroyView();
+        if(mLocationClient!=null){
+            mLocationClient.onDestroy();
+        }
+        mapView.onDestroy();
+    }
+
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
