@@ -4,4 +4,11 @@
     <string name="activity">活动</string>
     <string name="mine">我的</string>
     <string name="safe">安全</string>
+    <string name="weather_live">实时</string>
+    <string name="report_time">发布时间</string>
+    <string name="weather_forecast">天气预报</string>
+    <string name="little_tips">小提醒：</string>
+    <string name="no_result">没有找到相关结果</string>
+    <string name="btn_work">上下班</string>
+    <string name="btn_play">逛一逛</string>
 </resources>

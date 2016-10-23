@@ -1,8 +1,6 @@
 package com.example.user.tuzhong.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.ViewUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +10,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.location.LocationManagerBase;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
@@ -22,16 +19,12 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.example.user.tuzhong.R;
 
-import java.util.Map;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-
 /**
  * Created by user on 2016/10/19.
  */
 
-public class RideFragment extends SupportMapFragment implements AMapLocationListener, LocationSource{
-    private static RideFragment fragment = null;
+public class RidemapFragment extends SupportMapFragment implements AMapLocationListener, LocationSource{
+    private static RidemapFragment fragment = null;
     //@ViewInject(R.id.map)
 
     private MapView mapView;
@@ -42,10 +35,10 @@ public class RideFragment extends SupportMapFragment implements AMapLocationList
 
     public static SupportMapFragment newInstance() {
         if (fragment == null) {
-            synchronized (RideFragment.class) {
+            synchronized (RidemapFragment.class) {
 
                 if (fragment == null) {
-                    fragment = new RideFragment();
+                    fragment = new RidemapFragment();
 
                 }
 
