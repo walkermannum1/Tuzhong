@@ -18,14 +18,13 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements AMapLocationListener, BottomNavigationBar.OnTabSelectedListener{
+public class MainActivity extends AppCompatActivity implements LocationSource,AMapLocationListener, BottomNavigationBar.OnTabSelectedListener{
     private String TAG = MainActivity.class.getSimpleName();
     private ArrayList<Fragment> fragments;
-    private String cityname = null;
+    private String cityname;
     private LocationSource.OnLocationChangedListener mListener;
-    private AMapLocationClient mLocationClient;
+    private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
-    AMapLocation aMapLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
                 .addItem(new BottomNavigationItem(R.drawable.safe, "安全").setActiveColorResource(R.color.bottom_cl))
                 .setFirstSelectedPosition(0).initialise();
         fragments = getFragments();
-        getCityname(aMapLocation);
         setDefaultFragment();//with some fatal problem
         bottomNavigationBar.setTabSelectedListener(this);
     }
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
                     && aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);
                 cityname = aMapLocation.getCity();
-                Log.d("CityName:",cityname);
+                Log.d("CityName:", cityname);
             } else {
                 String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
                 Log.e("AmapErr",errText);
@@ -62,20 +60,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         }
     }
 
-    public String getCityname(AMapLocation aMapLocation) {
-        if (mListener != null && aMapLocation != null) {
-            if (aMapLocation != null
-                    && aMapLocation.getErrorCode() == 0) {
-                mListener.onLocationChanged(aMapLocation);
-                cityname = aMapLocation.getCity();
-                Log.d("CityName:",cityname);
-            } else {
-                String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
-                Log.e("AmapErr",errText);
-            }
-        }
-        return cityname;
-    }
     private void setDefaultFragment() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
@@ -126,5 +110,28 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     @Override
     public void onTabReselected(int position) {
 
+    }
+
+    @Override
+    public void activate(OnLocationChangedListener listener) {
+        mListener = listener;
+        if (mlocationClient == null) {
+            mlocationClient = new AMapLocationClient(this);
+            mLocationOption = new AMapLocationClientOption();
+            mlocationClient.setLocationListener(this);
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            mlocationClient.setLocationOption(mLocationOption);
+            mlocationClient.startLocation();
+        }
+    }
+
+    @Override
+    public void deactivate() {
+        mListener = null;
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+            mlocationClient.onDestroy();
+        }
+        mlocationClient = null;
     }
 }

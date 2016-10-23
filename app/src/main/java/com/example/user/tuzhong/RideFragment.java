@@ -39,7 +39,8 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
     private LocalWeatherLive weatherlive;
     private LocalWeatherForecast weatherforecast;
     private List<LocalDayWeatherForecast> forecastlist = null;
-    private String cityname="上海市";
+    private String cityname;
+            //="上海市";
     private LocationSource.OnLocationChangedListener mListener;
     private TextView mLocationErrText;
     private static RideFragment frgment = null;
