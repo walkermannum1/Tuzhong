@@ -8,15 +8,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Window;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.LocationSource;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener{
+public class MainActivity extends AppCompatActivity implements AMapLocationListener, BottomNavigationBar.OnTabSelectedListener{
     private String TAG = MainActivity.class.getSimpleName();
     private ArrayList<Fragment> fragments;
-
+    private String cityname = null;
+    private LocationSource.OnLocationChangedListener mListener;
+    private AMapLocationClient mLocationClient;
+    private AMapLocationClientOption mLocationOption;
+    AMapLocation aMapLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +42,40 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 .addItem(new BottomNavigationItem(R.drawable.safe, "安全").setActiveColorResource(R.color.bottom_cl))
                 .setFirstSelectedPosition(0).initialise();
         fragments = getFragments();
+        getCityname(aMapLocation);
         setDefaultFragment();//with some fatal problem
         bottomNavigationBar.setTabSelectedListener(this);
     }
 
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (mListener != null && aMapLocation != null) {
+            if (aMapLocation != null
+                    && aMapLocation.getErrorCode() == 0) {
+                mListener.onLocationChanged(aMapLocation);
+                cityname = aMapLocation.getCity();
+                Log.d("CityName:",cityname);
+            } else {
+                String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
+                Log.e("AmapErr",errText);
+            }
+        }
+    }
+
+    public String getCityname(AMapLocation aMapLocation) {
+        if (mListener != null && aMapLocation != null) {
+            if (aMapLocation != null
+                    && aMapLocation.getErrorCode() == 0) {
+                mListener.onLocationChanged(aMapLocation);
+                cityname = aMapLocation.getCity();
+                Log.d("CityName:",cityname);
+            } else {
+                String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
+                Log.e("AmapErr",errText);
+            }
+        }
+        return cityname;
+    }
     private void setDefaultFragment() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
