@@ -2,14 +2,13 @@ package com.example.user.tuzhong;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.services.weather.LocalDayWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherForecast;
@@ -23,13 +22,11 @@ import com.example.user.tuzhong.util.ToastUtil;
 
 import java.util.List;
 
-import static com.example.user.tuzhong.R.id.city;
-
 /**
  * Created by Guang on 2016/10/23.
  */
 
-public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSearchListener{
+public class RideFragment extends Fragment implements LocationUtil.LonLatListener,WeatherSearch.OnWeatherSearchListener{
     private TextView forecasttv;
     private android.widget.TextView reporttime1;
     private TextView reporttime2;
@@ -37,6 +34,8 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
     private TextView Temperature;
     private TextView wind;
     private TextView humidity;
+    private Button Btwork;
+    private Button Btplay;
     private WeatherSearchQuery mquery;
     private WeatherSearch mweathersearch;
     private LocalWeatherLive weatherlive;
@@ -60,16 +59,13 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
         return frgment;
     }
 
+    @Override
+    public void getLonLat(AMapLocation aMapLocation) {
+        cityname = aMapLocation.getCity();
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weather_fragment, container, false);
-        new LocationUtil().getLonLat(getActivity(), new LocationUtil.LonLatListener() {
-            @Override
-            public void getLonLat(AMapLocation aMapLocation) {
-                mLongitude = aMapLocation.getLongitude();
-                mLatitude = aMapLocation.getLatitude();
-                cityname = aMapLocation.getCity();
-            }
-        });
         TextView city =(TextView)view.findViewById(R.id.city);
         city.setText(cityname);
         forecasttv=(TextView)view.findViewById(R.id.forecast);
@@ -79,6 +75,8 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
         Temperature = (TextView)view.findViewById(R.id.temp);
         wind=(TextView)view.findViewById(R.id.wind);
         humidity = (TextView)view.findViewById(R.id.humidity);
+        Btwork = (Button)view.findViewById(R.id.goto_work);
+        Btplay = (Button)view.findViewById(R.id.goto_play);
         searchliveweather();
         searchforcastsweather();
         return view;
