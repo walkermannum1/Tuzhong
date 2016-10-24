@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.example.user.tuzhong.ui;
+package com.example.user.tuzhong.util;
 
 import android.content.Context;
 import android.widget.Toast;

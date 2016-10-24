@@ -18,15 +18,18 @@ import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
-import com.example.user.tuzhong.ui.ToastUtil;
+import com.example.user.tuzhong.util.LocationUtil;
+import com.example.user.tuzhong.util.ToastUtil;
 
 import java.util.List;
+
+import static com.example.user.tuzhong.R.id.city;
 
 /**
  * Created by Guang on 2016/10/23.
  */
 
-public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSearchListener, AMapLocationListener{
+public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSearchListener{
     private TextView forecasttv;
     private android.widget.TextView reporttime1;
     private TextView reporttime2;
@@ -40,7 +43,8 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
     private LocalWeatherForecast weatherforecast;
     private List<LocalDayWeatherForecast> forecastlist = null;
     private String cityname;
-            //="上海市";
+    private double mLongitude;
+    private double mLatitude;
     private LocationSource.OnLocationChangedListener mListener;
     private TextView mLocationErrText;
     private static RideFragment frgment = null;
@@ -58,6 +62,14 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weather_fragment, container, false);
+        new LocationUtil().getLonLat(getActivity(), new LocationUtil.LonLatListener() {
+            @Override
+            public void getLonLat(AMapLocation aMapLocation) {
+                mLongitude = aMapLocation.getLongitude();
+                mLatitude = aMapLocation.getLatitude();
+                cityname = aMapLocation.getCity();
+            }
+        });
         TextView city =(TextView)view.findViewById(R.id.city);
         city.setText(cityname);
         forecasttv=(TextView)view.findViewById(R.id.forecast);
@@ -120,24 +132,6 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
             }
         }else {
             ToastUtil.showerror(getActivity(), rCode);
-        }
-    }
-
-    @Override
-    public void onLocationChanged(AMapLocation amapLocation) {
-        if (mListener != null && amapLocation != null) {
-            if (amapLocation != null
-                    && amapLocation.getErrorCode() == 0) {
-                mLocationErrText.setVisibility(View.GONE);
-                mListener.onLocationChanged(amapLocation);
-                cityname = amapLocation.getCity();
-                Log.d("Mycity:", cityname );
-            } else {
-                String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
-                Log.e("AmapErr",errText);
-                mLocationErrText.setVisibility(View.VISIBLE);
-                mLocationErrText.setText(errText);
-            }
         }
     }
 

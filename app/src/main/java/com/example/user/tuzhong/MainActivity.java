@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 
 import com.amap.api.location.AMapLocation;
@@ -15,22 +17,31 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.LocationSource;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.example.user.tuzhong.util.LocationUtil;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements LocationSource,AMapLocationListener, BottomNavigationBar.OnTabSelectedListener{
+import static com.example.user.tuzhong.R.id.city;
+
+public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener{
     private String TAG = MainActivity.class.getSimpleName();
     private ArrayList<Fragment> fragments;
     private String cityname;
-    private LocationSource.OnLocationChangedListener mListener;
-    private AMapLocationClient mlocationClient;
-    private AMapLocationClientOption mLocationOption;
+    private double mLongitude;
+    private double mLatitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        //qixApp = (RideApplication) getApplicationContext();
+        new LocationUtil().getLonLat(this, new LocationUtil.LonLatListener() {
+            @Override
+            public void getLonLat(AMapLocation aMapLocation) {
+                mLongitude = aMapLocation.getLongitude();
+                mLatitude = aMapLocation.getLatitude();
+                cityname = aMapLocation.getCity();
+            }
+        });
         BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
@@ -43,21 +54,6 @@ public class MainActivity extends AppCompatActivity implements LocationSource,AM
         fragments = getFragments();
         setDefaultFragment();//with some fatal problem
         bottomNavigationBar.setTabSelectedListener(this);
-    }
-
-    @Override
-    public void onLocationChanged(AMapLocation aMapLocation) {
-        if (mListener != null && aMapLocation != null) {
-            if (aMapLocation != null
-                    && aMapLocation.getErrorCode() == 0) {
-                mListener.onLocationChanged(aMapLocation);
-                cityname = aMapLocation.getCity();
-                Log.d("CityName:", cityname);
-            } else {
-                String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
-                Log.e("AmapErr",errText);
-            }
-        }
     }
 
     private void setDefaultFragment() {
@@ -110,28 +106,5 @@ public class MainActivity extends AppCompatActivity implements LocationSource,AM
     @Override
     public void onTabReselected(int position) {
 
-    }
-
-    @Override
-    public void activate(OnLocationChangedListener listener) {
-        mListener = listener;
-        if (mlocationClient == null) {
-            mlocationClient = new AMapLocationClient(this);
-            mLocationOption = new AMapLocationClientOption();
-            mlocationClient.setLocationListener(this);
-            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-            mlocationClient.setLocationOption(mLocationOption);
-            mlocationClient.startLocation();
-        }
-    }
-
-    @Override
-    public void deactivate() {
-        mListener = null;
-        if (mlocationClient != null) {
-            mlocationClient.stopLocation();
-            mlocationClient.onDestroy();
-        }
-        mlocationClient = null;
     }
 }
