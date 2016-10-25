@@ -1,5 +1,6 @@
 package com.example.user.tuzhong;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.services.weather.LocalDayWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherForecast;
@@ -17,7 +17,6 @@ import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
-import com.example.user.tuzhong.util.LocationUtil;
 import com.example.user.tuzhong.util.ToastUtil;
 
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
  * Created by Guang on 2016/10/23.
  */
 
-public class RideFragment extends Fragment implements LocationUtil.LonLatListener,WeatherSearch.OnWeatherSearchListener{
+public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSearchListener{
     private TextView forecasttv;
     private android.widget.TextView reporttime1;
     private TextView reporttime2;
@@ -41,7 +40,7 @@ public class RideFragment extends Fragment implements LocationUtil.LonLatListene
     private LocalWeatherLive weatherlive;
     private LocalWeatherForecast weatherforecast;
     private List<LocalDayWeatherForecast> forecastlist = null;
-    private String cityname;
+    private String cityname = "上海市";
     private double mLongitude;
     private double mLatitude;
     private LocationSource.OnLocationChangedListener mListener;
@@ -59,12 +58,7 @@ public class RideFragment extends Fragment implements LocationUtil.LonLatListene
         return frgment;
     }
 
-    @Override
-    public void getLonLat(AMapLocation aMapLocation) {
-        cityname = aMapLocation.getCity();
-    }
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weather_fragment, container, false);
         TextView city =(TextView)view.findViewById(R.id.city);
         city.setText(cityname);
@@ -77,6 +71,22 @@ public class RideFragment extends Fragment implements LocationUtil.LonLatListene
         humidity = (TextView)view.findViewById(R.id.humidity);
         Btwork = (Button)view.findViewById(R.id.goto_work);
         Btplay = (Button)view.findViewById(R.id.goto_play);
+        Btwork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), WorkdayActivity.class);
+                startActivity(intent);
+            }
+        });
+        Btplay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), PlaydayActivity.class);
+                startActivity(intent);
+            }
+        });
         searchliveweather();
         searchforcastsweather();
         return view;

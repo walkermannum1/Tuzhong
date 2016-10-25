@@ -24,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".WorkdayActivity"
+                  android:label="WorkDay"/>
+        <activity android:name=".PlaydayActivity"
+                  android:label="PlayDay" />
         <service android:name="com.amap.api.location.APSService"></service>
     </application>
 </manifest>
