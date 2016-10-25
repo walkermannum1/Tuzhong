@@ -30,6 +30,15 @@ import com.example.user.tuzhong.R;
  */
 
 public class LocationUtil {
-
+    public synchronized static String getCityname(AMapLocation location) {
+        if (location == null) {
+            return null;
+        }
+        String cityname = null;
+        if (location.getErrorCode() == 0) {
+            cityname = location.getCity();
+        }
+        return cityname;
+    }
 }
 

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.services.weather.LocalDayWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherForecast;
@@ -17,9 +19,13 @@ import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
+import com.ashokvarma.bottomnavigation.utils.Utils;
+import com.example.user.tuzhong.util.LocationUtil;
 import com.example.user.tuzhong.util.ToastUtil;
 
 import java.util.List;
+
+import static com.example.user.tuzhong.R.id.city;
 
 /**
  * Created by Guang on 2016/10/23.
@@ -41,21 +47,17 @@ public class RideFragment extends Fragment implements WeatherSearch.OnWeatherSea
     private LocalWeatherForecast weatherforecast;
     private List<LocalDayWeatherForecast> forecastlist = null;
     private String cityname = "上海市";
-    private double mLongitude;
-    private double mLatitude;
-    private LocationSource.OnLocationChangedListener mListener;
-    private TextView mLocationErrText;
-    private static RideFragment frgment = null;
+    private static RideFragment fragment = null;
 
     public static Fragment newInstance() {
-        if (frgment == null) {
+        if (fragment == null) {
             synchronized (RideFragment.class) {
-                if (frgment == null) {
-                    frgment = new RideFragment();
+                if (fragment == null) {
+                    fragment = new RideFragment();
                 }
             }
         }
-        return frgment;
+        return fragment;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {

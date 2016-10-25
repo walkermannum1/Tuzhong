@@ -1,6 +1,7 @@
 package com.example.user.tuzhong;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -12,14 +13,25 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.route.BusRouteResult;
+import com.amap.api.services.route.DriveRouteResult;
+import com.amap.api.services.route.RideRouteResult;
+import com.amap.api.services.route.RouteSearch;
+import com.amap.api.services.route.WalkRouteResult;
 
 /**
  * Created by user on 2016/10/25.
  */
 
-public class WorkdayActivity extends Activity implements LocationSource, AMapLocationListener {
+public class WorkdayActivity extends Activity implements LocationSource, AMapLocationListener, RouteSearch.OnRouteSearchListener {
     private AMap mAMap;
     private MapView mMapView;
+    private Context mContext;
+    private RouteSearch mRouteSearch;
+    private RideRouteResult mRideResult;
+    private LatLonPoint mStartPoint = new LatLonPoint(118, 34);
+    private LatLonPoint mEndPoint = new LatLonPoint(118, 33);
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mClientOption;
@@ -108,5 +120,25 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
             mLocationClient.onDestroy();
         }
         mLocationClient = null;
+    }
+
+    @Override
+    public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
+
+    }
+
+    @Override
+    public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {
+
+    }
+
+    @Override
+    public void onWalkRouteSearched(WalkRouteResult walkRouteResult, int i) {
+
+    }
+
+    @Override
+    public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
+
     }
 }

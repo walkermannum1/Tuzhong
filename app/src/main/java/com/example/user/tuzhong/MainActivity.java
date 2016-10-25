@@ -27,21 +27,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private String TAG = MainActivity.class.getSimpleName();
     private ArrayList<Fragment> fragments;
     private String cityname;
-    private double mLongitude;
-    private double mLatitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        new LocationUtil().getLonLat(this, new LocationUtil.LonLatListener() {
-            @Override
-            public void getLonLat(AMapLocation aMapLocation) {
-                mLongitude = aMapLocation.getLongitude();
-                mLatitude = aMapLocation.getLatitude();
-                cityname = aMapLocation.getCity();
-            }
-        });
         BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
