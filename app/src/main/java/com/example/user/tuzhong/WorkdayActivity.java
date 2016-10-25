@@ -19,6 +19,7 @@ import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
+import com.example.user.tuzhong.util.ToastUtil;
 
 /**
  * Created by user on 2016/10/25.
@@ -35,6 +36,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mClientOption;
+    private final int ROUTE_TYPE_RIDE = 4;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,31 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
         mMapView = (MapView) findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         init();
+        setFormandtoMaker();
+        searchRouteResult(ROUTE_TYPE_RIDE, RouteSearch.RidingDefault);
+    }
+
+    public void searchRouteResult(int routeType, int mode) {
+        if (mStartPoint == null) {
+            ToastUtil.show(mContext, "定位中，稍后再试...");
+            return;
+        }
+        if (mEndPoint == null) {
+            ToastUtil.show(mContext, "终点未设置");
+        }
+        showProgressDialog();
+        final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(
+                mStartPoint, mEndPoint);
+        if (routeType == ROUTE_TYPE_RIDE) {// 骑行路径规划
+            RouteSearch.RideRouteQuery query = new RouteSearch.RideRouteQuery(fromAndTo, mode);
+            mRouteSearch.calculateRideRouteAsyn(query);// 异步路径规划骑行模式查询
+        }
+    }
+
+    private void showProgressDialog() {
+    }
+
+    private void setFormandtoMaker() {
     }
 
     private void init() {
