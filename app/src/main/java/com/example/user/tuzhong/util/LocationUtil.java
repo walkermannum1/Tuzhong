@@ -21,7 +21,9 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.services.core.LatLonPoint;
 import com.example.user.tuzhong.MainActivity;
 import com.example.user.tuzhong.R;
 
@@ -39,6 +41,10 @@ public class LocationUtil {
             cityname = location.getCity();
         }
         return cityname;
+    }
+
+    public static LatLng convertToLatLng(LatLonPoint latLonPoint) {
+        return new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude());
     }
 }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+import android.widget.RelativeLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -13,12 +14,15 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
+import com.example.user.tuzhong.util.LocationUtil;
 import com.example.user.tuzhong.util.ToastUtil;
 
 /**
@@ -31,6 +35,7 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     private Context mContext;
     private RouteSearch mRouteSearch;
     private RideRouteResult mRideResult;
+    private RelativeLayout mBottomLayout;
     private LatLonPoint mStartPoint = new LatLonPoint(118, 34);
     private LatLonPoint mEndPoint = new LatLonPoint(118, 33);
     private OnLocationChangedListener mListener;
@@ -71,6 +76,12 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
     }
 
     private void setFormandtoMaker() {
+        mAMap.addMarker(new MarkerOptions()
+                .position(LocationUtil.convertToLatLng(mStartPoint))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+        mAMap.addMarker(new MarkerOptions()
+                .position(LocationUtil.convertToLatLng(mEndPoint))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
     }
 
     private void init() {
@@ -78,6 +89,14 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
             mAMap = mMapView.getMap();
             setUpMap();
         }
+        registerListener();
+        mRouteSearch =new RouteSearch(this);
+        mRouteSearch.setRouteSearchListener(this);
+        mBottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
+    }
+
+    private void registerListener() {
+        mAMap.setOnMapClickListener((AMap.OnMapClickListener) WorkdayActivity.this);
     }
 
     private void setUpMap() {
