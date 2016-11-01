@@ -77,11 +77,11 @@ public class WorkdayActivity extends Activity implements LocationSource, AMapLoc
 
     private void setFormandtoMaker() {
         mAMap.addMarker(new MarkerOptions()
-                .position(LocationUtil.convertToLatLng(mStartPoint))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
+                .position(LocationUtil.convertToLatLng(mStartPoint)));
+               // .icon(BitmapDescriptorFactory.fromResource(R.drawable.start))
         mAMap.addMarker(new MarkerOptions()
-                .position(LocationUtil.convertToLatLng(mEndPoint))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
+                .position(LocationUtil.convertToLatLng(mEndPoint)));
+               // .icon(BitmapDescriptorFactory.fromResource(R.drawable.end))
     }
 
     private void init() {

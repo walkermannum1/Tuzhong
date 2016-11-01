@@ -18,8 +18,7 @@
             android:id="@+id/firstline"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_marginLeft="12dp"
-            android:singleLine="true"
+            android:layout_marginStart="12dp"
             android:textColor="#333333"
             android:textSize="16sp" />
 
@@ -28,9 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/firstline"
-            android:layout_marginLeft="12dp"
-            android:gravity="right"
-            android:singleLine="true"
+            android:layout_marginStart="12dp"
+            android:gravity="end"
             android:textColor="#999999"
             android:textSize="13sp"
             android:visibility="gone"/>
@@ -39,8 +37,8 @@
             android:id="@+id/detail"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -48,14 +46,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="详情"
+                android:text="@string/route_detail"
                 android:textColor="@color/blue"
                 android:textSize="14sp" />
 
             <Button
                 android:layout_width="7dp"
                 android:layout_height="13dp"
-                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
                 android:background="@drawable/arrow_right_blue"
                 android:gravity="center_vertical" />
         </LinearLayout>
